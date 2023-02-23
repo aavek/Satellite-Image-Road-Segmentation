@@ -1,5 +1,5 @@
 ## Graph Reasoned Multi-Scale Road Segmentation in Remote Sensing Imagery
-(IGARSS 2023 - Awaiting Acceptance)
+(IGARSS 2023 - Awaiting Abstract Acceptance)
 
 ## Overview
 
@@ -7,7 +7,7 @@
 ## How to Run
 
 ### 1. Dataset Instructions
-Download from: <br>
+Download: <br>
 [DeepGlobe](https://www.kaggle.com/datasets/balraj98/deepglobe-road-extraction-dataset) (Kaggle account required), <br> 
 [MassachusettsRoads](https://www.kaggle.com/datasets/balraj98/massachusetts-roads-dataset) (Kaggle account required), <br>
 [Spacenet](https://spacenet.ai/spacenet-roads-dataset/) (AWS account required).
@@ -35,15 +35,34 @@ Cropped Image Disk Space:<br> DeepGlobe ~= 24.3GB<br> MassachusettsRoads ~= 9.71
 
 ### 3. Training
 
-```python train.py -m ConvNeXt_UPerNet_DGCN_MTL -d <dataset_name> -e <experiment_name>```<br><br>
-Example:
-```python train.py -m ConvNeXt_UPerNet_DGCN_MTL -d MassachusettsRoads -e MassachusettsRoads```
+All training was performed on a single NVIDIA GeForce RTX 2080 Ti (11GB VRAM).<br>
+See the ```cfg.json``` file to ensure that the training settings are appropriate for your rig. 
+  
+To train the model from scratch, run:<br>
+```python train.py -m ConvNeXt_UPerNet_DGCN_MTL -d <dataset_name> -e <experiment_name>```<br>
+<details>
+<summary>Example</summary>
+python train.py -m ConvNeXt_UPerNet_DGCN_MTL -d MassachusettsRoads -e MassachusettsRoads
+</details>
+  
+To resume the training of a model:<br>
+```python train.py -m ConvNeXt_UPerNet_DGCN_MTL -d <dataset_name> -e <experiment_name> -r ./Experiments/<experiment_name>/model_best.pth.tar```
+
+To fine-tune a pre-trained model on a new dataset:<br> 
+```python train.py -m ConvNeXt_UPerNet_DGCN_MTL -d <dataset_name> -e <experiment_name> -rd ./Experiments/<experiment_name>/model_best.pth.tar```<br>
+For example, one can use pre-trained MassachusettsRoads model weights to start training for DeepGlobe or Spacenet to speed up convergence.
 
 ### 4. Evaluation
+```Backup your log files (*.txt) in ./Experiments/<experiment_name>/```<br><br>
+Once training ends (Default: 120 epochs), to evaluate Precision, Recall, F1, [IoU(relaxed)](https://www.cs.toronto.edu/~vmnih/docs/Mnih_Volodymyr_PhD_Thesis.pdf) [IoU(accurate)](https://www.cs.toronto.edu/~vmnih/docs/Mnih_Volodymyr_PhD_Thesis.pdf) metrics run:<br>
+```python eval.py -m ConvNeXt_UPerNet_DGCN_MTL -d <dataset_name> -e <experiment_name> -r ./Experiments/<experiment_name>/model_best.pth.tar```
 
-after training ends
-```python eval.py -m ConvNeXt_UPerNet_DGCN_MTL -d MassachusettsRoads -e MassachusettsRoads -r ./Experiments/MassachusettsRoads/model_best.pth.tar```
-
+The evaluation script uses elements from the utils folder of [[3]](https://github.com/anilbatra2185/road_connectivity/tree/master/utils).
+  
+This will create a ```./Experiments/<experiment_name>/images_eval``` folder with each file showing (clock-wise) the original image, its label, a feature heat-map and the stitched prediction.
+  
+To evaluate the [APLS](https://github.com/avanetten/apls) metric refer to this [link](https://github.com/anilbatra2185/road_connectivity/issues/13).
+  
 ### 5. Results
 ![results](https://user-images.githubusercontent.com/93454699/220936233-9be5869d-caf5-4723-af48-3a78bba6d91c.png)
 
@@ -70,3 +89,4 @@ https://doi.org/10.48550/arXiv.1807.01232<br><br>
 [9] W.G.C. Bandara, J.M.J. Valanarasu, V.M .Patel, “Spin road mapper: extracting roads from aerial images via spatial
 and interaction space graph reasoning for autonomous driving”. arXiv preprint arXiv:2109.07701 (2021)
 </details>
+  
