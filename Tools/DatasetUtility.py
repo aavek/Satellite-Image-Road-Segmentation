@@ -6,7 +6,6 @@ import torch
 from torch.utils import data
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 import Tools.sknw as sknw
 import Tools.LineSimplification as LineSimp
 import Tools.LineConversion as LineConv
@@ -25,7 +24,7 @@ class DatasetPreprocessor(data.Dataset):
         self.dataset_name = dataset_name
         self.loader_type = loader_type
         self.augment = self.cfg[self.loader_type]["augment"]
-        imagelabeldirs = ["train_dir", "train_label_dir"] if self.loader_type == "training_settings" else ["valid_dir", "valid_label_dir"]
+        imagelabeldirs = ["train_dir", "train_label_dir"] if self.loader_type == "training_settings" else ["test_dir", "test_label_dir"] # change dirs for test
         pathImages = os.path.abspath(os.curdir + self.cfg["Datasets"][dataset_name][imagelabeldirs[0]])
         pathLabels = os.path.abspath(os.curdir + self.cfg["Datasets"][dataset_name][imagelabeldirs[1]])
         imagelist = os.listdir(pathImages)

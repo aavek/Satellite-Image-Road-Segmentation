@@ -25,8 +25,6 @@ tqdm.monitor_interval = 0
 import cv2
 from skimage import io
 import argparse
-import matplotlib.pyplot as plt
-import albumentations as alb
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 

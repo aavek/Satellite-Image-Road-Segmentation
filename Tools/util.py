@@ -276,7 +276,7 @@ def savePredictedProb(
     else:
         cv2.imwrite(image_name, np.array(grid).reshape(b * h, 4 * w, 3))
 
-def savePredictedProbCorrected(
+def savePredictedProbStiched(
     real,
     gt,
     predicted,
@@ -292,13 +292,11 @@ def savePredictedProbCorrected(
     gt_tiles = []
     pred_tiles = []
     pred_prob_tiles = []
-    # affinity_bgr_tiles = []
     
     mean_bgr = np.array([70.95016901, 71.16398124, 71.30953645])
     deviation_bgr = np.array([34.00087859, 35.18201658, 36.40463264])
 
     for idx in range(b):
-        # real_ = np.asarray(real[idx].numpy().transpose(1,2,0),dtype=np.float32)
         real_ = np.asarray(real[idx].numpy().transpose(
             1, 2, 0), dtype=np.float32)
         if norm_type == "Mean":
@@ -316,9 +314,7 @@ def savePredictedProbCorrected(
         predicted_ = np.stack((predicted_,) * 3).transpose(1, 2, 0)
 
         predicted_prob_ = (predicted_prob[idx]).numpy() * 255.0
-        # predicted_prob_ = predicted_prob_[:,:]
         predicted_prob_ = np.asarray(predicted_prob_, dtype=np.uint8)
-        # predicted_prob_ = np.stack((predicted_prob_,)*3).transpose(1,2,0)
         predicted_prob_ = cv2.applyColorMap(predicted_prob_, cv2.COLORMAP_JET)
 
         real_tiles.append(real_)
@@ -335,35 +331,8 @@ def savePredictedProbCorrected(
     grid.append(secondrow)
     grid.append(thirdrow)
     grid.append(fourthrow)
-    
-        # if pred_affinity is not None:
-            # hsv = np.zeros_like(real_)
-            # hsv[..., 1] = 255
-            # affinity_ = pred_affinity[idx].numpy()
-            # mag = np.copy(affinity_)
-            # mag[mag < 36] = 1
-            # mag[mag >= 36] = 0
-            # affinity_[affinity_ == 36] = 0
-
-            # # mag, ang = cv2.cartToPolar(affinity_[0], affinity_[1])
-            # hsv[..., 0] = affinity_ * 10 / np.pi / 2
-            # hsv[..., 2] = cv2.normalize(mag, None, 0, 255, cv2.NORM_MINMAX)
-            # affinity_bgr = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
-
-            # pair = np.concatenate(
-                # (real_, gt_, predicted_, predicted_prob_, affinity_bgr), axis=1
-            # )
-        # else:
-            # pair = np.concatenate(
-                # (real_, gt_, predicted_, predicted_prob_), axis=1)
-        # grid.append(pair)
         
     cv2.imwrite(image_name, np.array(grid).reshape(b * h, 4 * w, 3))
-
-    # if pred_affinity is not None:
-        # cv2.imwrite(image_name, np.array(grid).reshape(b * h, 5 * w, 3))
-    # else:
-        # cv2.imwrite(image_name, np.array(grid).reshape(b * h, 4 * w, 3))
 
 def get_relaxed_precision(a, b, buffer):
     tp = 0
@@ -374,6 +343,78 @@ def get_relaxed_precision(a, b, buffer):
               indices[1][ind]-buffer: indices[1][ind]+buffer+1]) > 0).astype(np.int)
     return tp
 
+global mr_real_tiles
+global mr_gt_tiles
+global mr_pred_tiles
+global mr_pred_prob_tiles
+mr_real_tiles = []
+mr_gt_tiles = []
+mr_pred_tiles = []
+mr_pred_prob_tiles = []
+def savePredictedProbStichedMR(
+    i_stage,
+    real,
+    gt,
+    predicted,
+    predicted_prob,
+    pred_affinity=None,
+    image_name="",
+    norm_type="Mean",
+):
+    b, c, h, w = real.size()
+    mr_grid = []
+    
+    mean_bgr = np.array([70.95016901, 71.16398124, 71.30953645])
+    deviation_bgr = np.array([34.00087859, 35.18201658, 36.40463264])
+
+    for idx in range(b):
+        real_ = np.asarray(real[idx].numpy().transpose(
+            1, 2, 0), dtype=np.float32)
+        if norm_type == "Mean":
+            real_ = real_ + mean_bgr
+        elif norm_type == "Std":
+            real_ = (real_ * deviation_bgr) + mean_bgr
+
+        real_ = np.asarray(real_, dtype=np.uint8)
+        gt_ = gt[idx].numpy() * 255.0
+        gt_ = np.asarray(gt_, dtype=np.uint8)
+        gt_ = np.stack((gt_,) * 3).transpose(1, 2, 0)
+
+        predicted_ = (predicted[idx]).numpy() * 255.0
+        predicted_ = np.asarray(predicted_, dtype=np.uint8)
+        predicted_ = np.stack((predicted_,) * 3).transpose(1, 2, 0)
+
+        predicted_prob_ = (predicted_prob[idx]).numpy() * 255.0
+        predicted_prob_ = np.asarray(predicted_prob_, dtype=np.uint8)
+        predicted_prob_ = cv2.applyColorMap(predicted_prob_, cv2.COLORMAP_JET)
+
+        mr_real_tiles.append(real_)
+        mr_gt_tiles.append(gt_)
+        mr_pred_tiles.append(predicted_)
+        mr_pred_prob_tiles.append(predicted_prob_)
+
+    if ((i_stage > 1) and ((i_stage+1) % 3 == 0)):
+    
+        firstrow = np.concatenate((mr_real_tiles[0],mr_real_tiles[1],mr_real_tiles[2],mr_gt_tiles[0],mr_gt_tiles[1],mr_gt_tiles[2]), axis=1)
+        secondrow = np.concatenate((mr_real_tiles[3],mr_real_tiles[4],mr_real_tiles[5],mr_gt_tiles[3],mr_gt_tiles[4],mr_gt_tiles[5]), axis=1)
+        thirdrow = np.concatenate((mr_real_tiles[6],mr_real_tiles[7],mr_real_tiles[8],mr_gt_tiles[6],mr_gt_tiles[7],mr_gt_tiles[8]), axis=1)
+        fourthrow = np.concatenate((mr_pred_tiles[0],mr_pred_tiles[1],mr_pred_tiles[2],mr_pred_prob_tiles[0],mr_pred_prob_tiles[1],mr_pred_prob_tiles[2]), axis=1)
+        fifthrow = np.concatenate((mr_pred_tiles[3],mr_pred_tiles[4],mr_pred_tiles[5],mr_pred_prob_tiles[3],mr_pred_prob_tiles[4],mr_pred_prob_tiles[5]), axis=1)
+        sixthrow = np.concatenate((mr_pred_tiles[6],mr_pred_tiles[7],mr_pred_tiles[8],mr_pred_prob_tiles[6],mr_pred_prob_tiles[7],mr_pred_prob_tiles[8]), axis=1)
+        
+        mr_grid.append(firstrow)
+        mr_grid.append(secondrow)
+        mr_grid.append(thirdrow)
+        mr_grid.append(fourthrow)
+        mr_grid.append(fifthrow)
+        mr_grid.append(sixthrow)
+            
+        cv2.imwrite(image_name, np.array(mr_grid).reshape(6 * h, 6 * w, 3))
+        
+        mr_real_tiles.clear() 
+        mr_gt_tiles.clear() 
+        mr_pred_tiles.clear() 
+        mr_pred_prob_tiles.clear() 
 
 def relaxed_f1(pred, gt, buffer=3):
     ''' Usage and Call

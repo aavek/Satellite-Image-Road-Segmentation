@@ -5,7 +5,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.ops.misc import Permute
-import torchinfo
 import cv2
 
 ConvNeXt_Archs = {

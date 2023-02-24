@@ -104,7 +104,8 @@ def evaluate_model(ExperimentDirectory, model, dataset_name, nGPUs, cfg, train_l
                 images_path = "{}/images_eval/".format(ExperimentDirectory)
                 util.ensure_dir(images_path)
                 if dataset_name == "MassachusettsRoads":
-                    util.savePredictedProb(
+                    util.savePredictedProbStichedMR(
+                        i,
                         imageBGR.data.cpu(),
                         scaled_target_road_label[-1].cpu(),
                         predicted_road_.cpu(),
@@ -113,7 +114,7 @@ def evaluate_model(ExperimentDirectory, model, dataset_name, nGPUs, cfg, train_l
                         os.path.join(images_path, "validate_pair_{}_{}.png".format(Epoch, i)),
                         norm_type="Mean")
                 else:
-                    util.savePredictedProbCorrected(
+                    util.savePredictedProbStiched(
                         imageBGR.data.cpu(),
                         scaled_target_road_label[-1].cpu(),
                         predicted_road_.cpu(),
