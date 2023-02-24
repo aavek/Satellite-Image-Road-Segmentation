@@ -27,7 +27,10 @@ Next, locate the ```"PS-MS"``` folder in each corresponding ```AOI_#_<city>``` d
 Create an environment with anaconda: ```conda create --name <your_env_name> python=3.9```<br>
 Next, activate your environment: ```conda activate <your_env_name>```<br>
 Install dependencies from pip: ```pip install -r requirements.txt```<br>
-Install dependencies from conda: ```conda install pytorch=1.13.0 torchvision=0.14 pytorch-cuda=11.6 -c pytorch -c nvidia```
+Install dependencies from conda:<br>
+```conda install gdal```<br>
+```conda install pytorch=1.13.0 torchvision=0.14 pytorch-cuda=11.6 -c pytorch -c nvidia```<br>
+
 
 Now we will create our cropped images for each train/val/test part (where applicable) of a chosen Dataset.<br>
 In the console enter: ```python setup.py -d Datasets -cs 512 -j <name of dataset>``` (-cs is the crop-size)<br>
