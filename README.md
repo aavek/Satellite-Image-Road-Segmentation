@@ -26,7 +26,8 @@ Next, locate the ```"PS-MS"``` folder in each corresponding ```AOI_#_<city>``` d
 
 Create an environment with anaconda: ```conda create --name <your_env_name> python=3.9```<br>
 Next, activate your environment: ```conda activate <your_env_name>```<br>
-Install dependencies: ```pip install -r requirements.txt```<br>
+Install dependencies from pip: ```pip install -r requirements.txt```<br>
+Install dependencies from conda: ```conda install pytorch=1.13.0 torchvision=0.14 pytorch-cuda=11.6 -c pytorch -c nvidia```
 
 Now we will create our cropped images for each train/val/test part (where applicable) of a chosen Dataset.<br>
 In the console enter: ```python setup.py -d Datasets -cs 512 -j <name of dataset>``` (-cs is the crop-size)<br>
@@ -64,6 +65,7 @@ This will create a ```./Experiments/<experiment_name>/images_eval``` folder with
 To evaluate the [APLS](https://github.com/avanetten/apls) metric refer to this [link](https://github.com/anilbatra2185/road_connectivity/issues/13).
   
 ### 5. Results
+You may also refer to this [link](https://github.com/aavek/Satellite-Image-Road-Segmentation/blob/main/docs/IGARSS_Vekinis_2023_ea.pdf) for better viewing.
 ![results](https://user-images.githubusercontent.com/93454699/220936233-9be5869d-caf5-4723-af48-3a78bba6d91c.png)
 
 <details> 
