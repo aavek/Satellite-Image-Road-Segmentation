@@ -1,9 +1,6 @@
 ## Graph Reasoned Multi-Scale Road Segmentation in Remote Sensing Imagery
 (IGARSS 2023 - Awaiting Abstract Acceptance)
 
-## Overview
-
-
 ## How to Run
 
 ### 1. Dataset Instructions
