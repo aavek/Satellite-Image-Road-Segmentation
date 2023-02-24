@@ -50,7 +50,7 @@ To resume the training of a model:<br>
 ```python train.py -m ConvNeXt_UPerNet_DGCN_MTL -d <dataset_name> -e <experiment_name> -r ./Experiments/<experiment_name>/model_best.pth.tar```
 
 To fine-tune a pre-trained model on a new dataset:<br> 
-```python train.py -m ConvNeXt_UPerNet_DGCN_MTL -d <dataset_name> -e <experiment_name> -rd ./Experiments/<experiment_name>/model_best.pth.tar```<br>
+```python train.py -m ConvNeXt_UPerNet_DGCN_MTL -d <dataset_name> -e <experiment_name> -rd ./Experiments/<experiment_name>/model_best.pth.tar```<br><br>
 For example, one can use pre-trained MassachusettsRoads model weights to start training for DeepGlobe or Spacenet to speed up convergence.
 
 ### 4. Evaluation
