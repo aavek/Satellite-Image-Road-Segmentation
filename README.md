@@ -63,7 +63,7 @@ Once training ends (Default: 120 epochs), to evaluate Precision, Recall, F1, [Io
 
 The evaluation script uses elements from the utils folder of [[3]](https://github.com/anilbatra2185/road_connectivity/tree/master/utils).
   
-This will create a ```./Experiments/<experiment_name>/images_eval``` folder with each file showing (clock-wise) the original image, its label, a feature heat-map and the stitched prediction.
+This will create a ```./Experiments/<experiment_name>/images_eval``` folder with each file showing (clock-wise) the original image, its label, a feature heat-map and the stitched prediction. Note, that for MassachusettsRoads, use a validation setting batch_size of 3 (cfg.json) when creating the images.
   
 To evaluate the [APLS](https://github.com/avanetten/apls) metric refer to this [link](https://github.com/anilbatra2185/road_connectivity/issues/13).
   
