@@ -1,5 +1,14 @@
 ## Graph Reasoned Multi-Scale Road Segmentation in Remote Sensing Imagery
-(IGARSS 2023 - ACCEPTED for inclusion as a Poster presentation in the IGARSS 2023 program):rocket:
+
+:rocket: ACCEPTED for inclusion as a Poster presentation in the IGARSS 2023 Conference in Pasadena, California :rocket:
+
+### Example: Rapid City-Scale Road Network Extraction (Las Vegas)
+
+Road network predictions on a small region of Las Vegas with geo-referenced (1300x1300x3) RGB images from ArcGIS World Imagery Map Service (ground resolution of 0.3 m2 / pixel) using QGIS. Image below is (9x6) grid.
+
+![front](https://github.com/aavek/Satellite-Image-Road-Segmentation/assets/93454699/c7405406-5181-4c04-a704-4009a98792e4)
+
+<p align="center"> Areal inference speed: ~650km<sup>2</sup> / hour / GPU</p>
 
 ## How to Run
 
