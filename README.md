@@ -1,6 +1,6 @@
 ## Graph Reasoned Multi-Scale Road Segmentation in Remote Sensing Imagery
 
-:rocket: ACCEPTED for inclusion as a Poster presentation in the IGARSS 2023 Conference in Pasadena, California :rocket:
+:rocket: Presented at the IEEE International Geoscience and Remote Sensing Symposium (IGARSS) 2023 Conference in Pasadena, California, USA :rocket:
 
 ### Example: Rapid City-Scale Road Network Extraction (Las Vegas)
 
@@ -10,7 +10,7 @@ Road network predictions on a small region of Las Vegas with geo-referenced (130
 
 <p align="center"> Areal inference speed: ~650km<sup>2</sup> / hour / GPU</p>
 
-Paper link: Coming Soon <sup>TM</sup> 
+Paper link: [Graph Reasoned Multi-Scale Road Segmentation in Remote Sensing Imagery](https://ieeexplore.ieee.org/document/10281660)
 
 ## How to Run
 
